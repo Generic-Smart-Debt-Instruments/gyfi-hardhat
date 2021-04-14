@@ -4,8 +4,6 @@ require('@openzeppelin/hardhat-upgrades');
 require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
 require("solidity-coverage");
-require('hardhat-dependency-compiler');
-
 
 const loadJsonFile = require('load-json-file')
 const keys = loadJsonFile.sync("./keys.json")

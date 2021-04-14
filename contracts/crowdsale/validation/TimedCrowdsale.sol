@@ -80,7 +80,7 @@ abstract contract TimedCrowdsale is Crowdsale {
      * @param beneficiary Token purchaser
      * @param weiAmount Amount of wei contributed
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyWhileOpen view override {}
+    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal onlyWhileOpen view override virtual {}
 
     /**
      * @dev Extend crowdsale.

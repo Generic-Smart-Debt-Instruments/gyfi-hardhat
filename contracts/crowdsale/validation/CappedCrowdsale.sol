@@ -39,10 +39,9 @@ abstract contract CappedCrowdsale is Crowdsale {
 
     /**
      * @dev Extend parent behavior requiring purchase to respect the funding cap.
-     * @param beneficiary Token purchaser
      * @param weiAmount Amount of wei contributed
      */
-    function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal view override {
+    function _preValidatePurchase(address /* beneficiary */, uint256 weiAmount) internal view override virtual {
         require(weiRaised().add(weiAmount) <= _cap, "CappedCrowdsale: cap exceeded");
     }
 }
