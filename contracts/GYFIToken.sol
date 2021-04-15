@@ -13,7 +13,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 /// @title Yield farming token for GSDI.
 /// @author jkp
-contract GYFIToken is Ownable, ERC20Snapshot, ERC20Burnable, ERC677 {
+contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 {
     using SafeMath for uint256;
 
     mapping(address => bool) public isBlacklisted;
@@ -21,8 +21,8 @@ contract GYFIToken is Ownable, ERC20Snapshot, ERC20Burnable, ERC677 {
     constructor() ERC20("GYFIToken", "GYFI") {}
 
     /// @notice Allows the contract owner to blacklist accounts believed to be under the jurisdiction of the Securities Exchange Commission of the United States of America. Blacklisted accounts can send but not receive tokens.
-    function usaSecJurisdictionBlacklist(address account) public onlyOwner {
-        isBlacklisted[account] = true;
+    function usaSecJurisdictionBlacklist(address _account, bool _isBlacklisted) public override onlyOwner {
+        isBlacklisted[_account] = _isBlacklisted;
     }
 
     // For ERC677 implementation, see https://github.com/smartcontractkit/LinkToken/blob/master/contracts/v0.6/ERC677Token.sol
@@ -32,7 +32,7 @@ contract GYFIToken is Ownable, ERC20Snapshot, ERC20Burnable, ERC677 {
         address to,
         uint256 value,
         bytes memory data
-    ) public override returns (bool success) {
+    ) public override (IGYFIToken, ERC677) returns (bool success) {
         transfer(to, value);
 
         emit Transfer(msg.sender, to, value, data);
