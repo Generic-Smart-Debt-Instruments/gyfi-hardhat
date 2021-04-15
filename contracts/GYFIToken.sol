@@ -46,6 +46,14 @@ contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 
         return true;
     }
 
+    function balanceOfAt(address account, uint256 snapshotId) public view override(ERC20Snapshot, IGYFIToken) returns (uint256) {
+        return ERC20Snapshot.balanceOfAt(account, snapshotId);
+    }
+
+    function totalSupplyAt(uint256 snapshotId) public view override(ERC20Snapshot, IGYFIToken) returns (uint256) {
+        return ERC20Snapshot.totalSupplyAt(snapshotId);
+    }
+
     function _beforeTokenTransfer(
         address from,
         address to,
