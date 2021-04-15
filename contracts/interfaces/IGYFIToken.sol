@@ -15,22 +15,18 @@ interface IGYFIToken is IERC20 {
     function transferAndCall(address to, uint value, bytes memory data) external returns (bool success);
 
 
-    // For snapshots, See Open Zeppelin's ERC20 Snapshot.
-    /**
-     * @dev Emitted by {_snapshot} when a snapshot identified by `id` is created.
-     */
-    event Snapshot(uint256 id);
+    // For snapshots, See minimi token.
 
     /**
-     * @dev Retrieves the balance of `account` at the time `snapshotId` was created.
+     * @dev Retrieves the balance of `account` at snapshotID.
      */
-    function balanceOfAt(address account, uint256 snapshotId)
+    function balanceOfAt(address account, uint256 snapshotID)
         external
         view
         returns (uint256);
 
     /**
-     * @dev Retrieves the total supply at the time `snapshotId` was created.
+     * @dev Retrieves the total supply at snapshotID.
      */
-    function totalSupplyAt(uint256 snapshotId) external view returns (uint256);
+    function totalSupplyAt(uint256 snapshotID) external view returns (uint256);
 }

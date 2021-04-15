@@ -18,7 +18,9 @@ contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 
 
     mapping(address => bool) public isBlacklisted;
 
-    constructor() ERC20("GYFIToken", "GYFI") {}
+    constructor() ERC20("GYFIToken", "GYFI") {
+        _mint(msg.sender, 10000000 ether);
+    }
 
     /// @notice Allows the contract owner to blacklist accounts believed to be under the jurisdiction of the Securities Exchange Commission of the United States of America. Blacklisted accounts can send but not receive tokens.
     function usaSecJurisdictionBlacklist(address _account, bool _isBlacklisted) public override onlyOwner {
@@ -44,23 +46,12 @@ contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 
         return true;
     }
 
-    function transfer(address recipient, uint256 amount)
-        public
-        override(ERC20, IERC20)
-        returns (bool)
-    {
-        require(isBlacklisted[recipient] != true, "blacklisted user");
-
-        return super.transfer(recipient, amount);
-    }
-
-    // PRIVATE
-
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 amount
     ) internal override(ERC20, ERC20Snapshot) {
+        require(isBlacklisted[to] != true, "GYFIToken: Blacklisted user");
         super._beforeTokenTransfer(from, to, amount);
     }
 
