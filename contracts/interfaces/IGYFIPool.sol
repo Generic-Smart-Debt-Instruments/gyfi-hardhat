@@ -38,7 +38,7 @@ interface IGYFIPool is IERC20 {
     /**
      * @dev Retrieves the total supply at the blockNumber.
      */
-    function totalSupplyAt(uint256 snapshotId, uint256 blockNumber)
+    function totalSupplyAt(uint256 blockNumber)
         external
         view
         returns (uint256);
