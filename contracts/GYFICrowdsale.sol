@@ -39,7 +39,7 @@ contract GYFICrowdsale is Crowdsale, AllowanceCrowdsale, CappedCrowdsale, TimedC
     
     function _preValidatePurchase(address beneficiary, uint256 weiAmount) internal override(Crowdsale, CappedCrowdsale, TimedCrowdsale, WhitelistCrowdsale) view {
         // Per beneficiary cap
-        require(contribution[beneficiary].add(weiAmount) < perBeneficiaryCap, "GYFICrowdsale: Contribution above cap.");
+        require(contribution[beneficiary].add(weiAmount) <= perBeneficiaryCap, "GYFICrowdsale: Contribution above cap.");
 
         CappedCrowdsale._preValidatePurchase(beneficiary, weiAmount);
         TimedCrowdsale._preValidatePurchase(beneficiary, weiAmount);

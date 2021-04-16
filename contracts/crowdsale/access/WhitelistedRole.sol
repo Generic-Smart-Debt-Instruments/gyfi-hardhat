@@ -32,8 +32,20 @@ contract WhitelistedRole is Context, WhitelistAdminRole {
         _addWhitelisted(account);
     }
 
+    function addWhitelistedAll(address[] calldata accounts) public onlyWhitelistAdmin {
+        for(uint256 i = accounts.length; i<accounts.length; i++) {
+            _addWhitelisted(accounts[i]);
+        }        
+    }
+
     function removeWhitelisted(address account) public onlyWhitelistAdmin {
         _removeWhitelisted(account);
+    }
+
+    function removeWhitelistedAll(address[] calldata accounts) public onlyWhitelistAdmin {
+        for(uint256 i = accounts.length; i<accounts.length; i++) {
+            _removeWhitelisted(accounts[i]);
+        }        
     }
 
     function renounceWhitelisted() public {
