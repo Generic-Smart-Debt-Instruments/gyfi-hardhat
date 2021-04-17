@@ -86,11 +86,11 @@ interface IGYFIStrategy {
 
     /// @notice Withdraw currency from the contract. Only callable by pool.
     /// @param _amount Amount of currency to withdraw.
-    function withdraw(uint256 _amount) external;
+    function withdraw(uint256 _amount, address receiver) external;
 
     /// @notice Deposit currency to the contract. Only callable by pool.
     /// @param _amount Amount of currency to deposit.
-    function deposit(uint256 _amount) external;
+    function deposit(uint256 _amount, address sender) external;
 
     //////////////////////////////////////////
     // For snapshots, See the MiniMe token. //
