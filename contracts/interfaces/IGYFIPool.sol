@@ -23,23 +23,21 @@ interface IGYFIPool is IERC20 {
     /// @dev Uses IGYFIStrategy to find price. Calls IGYFIStrategy.withdraw.
     function burn(uint256 _amountShares) external;
 
-    //////////////////////////////////////////
-    // For snapshots, See the MiniMe token. //
-    //////////////////////////////////////////
+   // For snapshots, See openzeppelin's ERC20Snapshot.
+
+    /// @notice Creates a new snapshot at the current block.
+    function snapshot() external returns (uint256 _snapshotId);
 
     /**
-     * @dev Retrieves the balance of `account` at the blockNumber.
+     * @dev Retrieves the balance of `account` at snapshotID.
      */
-    function balanceOfAt(address account, uint256 blockNumber)
+    function balanceOfAt(address account, uint256 snapshotID)
         external
         view
         returns (uint256);
 
     /**
-     * @dev Retrieves the total supply at the blockNumber.
+     * @dev Retrieves the total supply at snapshotID.
      */
-    function totalSupplyAt(uint256 blockNumber)
-        external
-        view
-        returns (uint256);
+    function totalSupplyAt(uint256 snapshotID) external view returns (uint256);
 }
