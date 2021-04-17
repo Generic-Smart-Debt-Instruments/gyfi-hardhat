@@ -3,15 +3,15 @@ pragma solidity >=0.8.3 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
-import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./interfaces/IGYFIStrategy.sol";
 import "./interfaces/IGYFIPool.sol";
 import "./interfaces/IGYFIToken.sol";
 
 /// @title Lending pool for purchasing GSDI via strategies.
 /// @author devneser
-contract GYFIPool is Ownable, IGYFIPool, ERC20Snapshot {
+contract GYFIPool is IGYFIPool, ERC20Snapshot {
+  using SafeMath for uint256;
 
   // Strategy interface for implementing custom strategies to purchase GSDI
   IGYFIStrategy public override strategy;
@@ -23,20 +23,22 @@ contract GYFIPool is Ownable, IGYFIPool, ERC20Snapshot {
   /// @notice Mints shares valued at amount. Requires user to approve IGYFIStrategy for currency.
   /// @dev Uses IGYFIStrategy to find price. Calls IGYFIStrategy.deposit.
   /// @param _amountCurrency Amount of currency in wad to deposit.
-  function mint(uint256 _amountCurrency) public override onlyOwner {
-		_mint(owner(), _amountCurrency);
+  function mint(uint256 _amountCurrency) public override {
+		_mint(msg.sender, _amountCurrency);
     if (allowance(msg.sender, address(strategy)) < _amountCurrency) {
       approve(address(strategy), _amountCurrency);
     }
-    strategy.deposit(_amountCurrency);
+    uint256 _amountDeposit = _amountCurrency.mul(totalSupply()).div(strategy.totalValue());
+    strategy.deposit(_amountDeposit);
     emit Mint(msg.sender, _amountCurrency);
   }
 
   /// @notice Burns shares valued at amount. Transfers currency equal to share value to sender.
   /// @dev Uses IGYFIStrategy to find price. Calls IGYFIStrategy.withdraw.
-  function burn(uint256 _amountShares) public override onlyOwner {
-		_burn(owner(), _amountShares);
-    strategy.withdraw(_amountShares);
+  function burn(uint256 _amountShares) public override {
+		_burn(msg.sender, _amountShares);
+    uint256 _amountWithdraw = _amountShares.mul(strategy.totalValue()).div(totalSupply());
+    strategy.withdraw(_amountWithdraw);
     emit Burn(msg.sender, _amountShares);
   }
 
