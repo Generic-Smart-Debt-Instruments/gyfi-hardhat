@@ -25,11 +25,8 @@ contract GYFIPool is IGYFIPool, ERC20Snapshot {
   /// @param _amountCurrency Amount of currency in wad to deposit.
   function mint(uint256 _amountCurrency) public override {
 		_mint(msg.sender, _amountCurrency);
-    if (allowance(msg.sender, address(strategy)) < _amountCurrency) {
-      approve(address(strategy), _amountCurrency);
-    }
     uint256 _amountDeposit = _amountCurrency.mul(totalSupply()).div(strategy.totalValue());
-    strategy.deposit(_amountDeposit);
+    strategy.deposit(_amountDeposit, msg.sender);
     emit Mint(msg.sender, _amountCurrency);
   }
 
@@ -38,7 +35,7 @@ contract GYFIPool is IGYFIPool, ERC20Snapshot {
   function burn(uint256 _amountShares) public override {
 		_burn(msg.sender, _amountShares);
     uint256 _amountWithdraw = _amountShares.mul(strategy.totalValue()).div(totalSupply());
-    strategy.withdraw(_amountWithdraw);
+    strategy.withdraw(_amountWithdraw, msg.sender);
     emit Burn(msg.sender, _amountShares);
   }
 
