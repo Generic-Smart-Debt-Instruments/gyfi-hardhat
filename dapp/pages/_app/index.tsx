@@ -4,6 +4,7 @@ import App, { AppInitialProps, AppContext } from "next/app";
 import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import withRedux from "next-redux-wrapper";
+import { DAppProvider, Config } from "@usedapp/core";
 // #endregion Global Imports
 
 // #region Local Imports
@@ -11,9 +12,15 @@ import { theme } from "@Definitions/Styled";
 import { appWithTranslation } from "@Server/i18n";
 import { AppWithStore } from "@Interfaces";
 import { makeStore } from "@Redux";
+import { CHAINS, CHAIN_RPC_URLS } from "src/Constants";
 
 import "@Static/css/main.scss";
 // #endregion Local Imports
+
+const config: Config = {
+    readOnlyChainId: CHAINS.Ropsten,
+    readOnlyUrls: CHAIN_RPC_URLS,
+};
 
 class WebApp extends App<AppWithStore> {
     static async getInitialProps({
@@ -32,9 +39,11 @@ class WebApp extends App<AppWithStore> {
 
         return (
             <Provider store={store}>
-                <ThemeProvider theme={theme}>
-                    <Component {...pageProps} />
-                </ThemeProvider>
+                <DAppProvider config={config}>
+                    <ThemeProvider theme={theme}>
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </DAppProvider>
             </Provider>
         );
     }

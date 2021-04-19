@@ -3,13 +3,13 @@
 To install dependencies:
 
 ```
-npm install
+yarn install
 ```
 
 To run on localhost:
 
 ```
-npm run start:dev
+yarn start:dev
 ```
 
 The default port is 8080 and you can customise it through `.env` file.

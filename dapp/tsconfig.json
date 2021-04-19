@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -15,23 +19,57 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@Actions": ["src/Actions"],
-      "@Components/*": ["src/Components/*"],
-      "@Components": ["src/Components"],
-      "@Definitions/*": ["src/Definitions/*"],
-      "@Definitions": ["src/Definitions"],
-      "@Interfaces": ["src/Interfaces"],
-      "@Interfaces/*": ["src/Interfaces/*"],
-      "@Pages/*": ["pages/*"],
-      "@Reducers": ["src/Redux/Reducers"],
-      "@Reducers/*": ["src/Redux/Reducers/*"],
-      "@Redux": ["src/Redux"],
-      "@Redux/*": ["src/Redux/*"],
-      "@Server/*": ["server/*"],
-      "@Services": ["src/Services"],
-      "@Services/*": ["src/Services/*"],
-      "@Static/*": ["public/static/*"],
-      "@Test/*": ["test/*"]
+      "@Actions": [
+        "src/Actions"
+      ],
+      "@Components/*": [
+        "src/Components/*"
+      ],
+      "@Components": [
+        "src/Components"
+      ],
+      "@Definitions/*": [
+        "src/Definitions/*"
+      ],
+      "@Definitions": [
+        "src/Definitions"
+      ],
+      "@Interfaces": [
+        "src/Interfaces"
+      ],
+      "@Interfaces/*": [
+        "src/Interfaces/*"
+      ],
+      "@Pages/*": [
+        "pages/*"
+      ],
+      "@Reducers": [
+        "src/Redux/Reducers"
+      ],
+      "@Reducers/*": [
+        "src/Redux/Reducers/*"
+      ],
+      "@Redux": [
+        "src/Redux"
+      ],
+      "@Redux/*": [
+        "src/Redux/*"
+      ],
+      "@Server/*": [
+        "server/*"
+      ],
+      "@Services": [
+        "src/Services"
+      ],
+      "@Services/*": [
+        "src/Services/*"
+      ],
+      "@Static/*": [
+        "public/static/*"
+      ],
+      "@Test/*": [
+        "test/*"
+      ]
     }
   },
   "exclude": [
@@ -45,5 +83,9 @@
     "coverage",
     "test/*"
   ],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
 }
