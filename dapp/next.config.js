@@ -14,6 +14,12 @@ const nextConfig = {
       reportFilename: "../bundles/client.html",
     },
   },
+  exportTrailingSlash: true,
+  exportPathMap: function() {
+    return {
+      "/": { page: "/" },
+    };
+  },
 };
 
 module.exports = withPlugins([[withBundleAnalyzer]], nextConfig);
