@@ -26,7 +26,7 @@ contract GYFIToken is
 
     mapping(address => bool) public isBlacklisted;
 
-    function intialize() public initializer {
+    function initialize() public initializer {
         __ERC20_init("GYFIToken", "GYFI");
         _mint(msg.sender, 10000000 ether);
     }
