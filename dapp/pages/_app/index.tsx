@@ -12,41 +12,48 @@ import { theme } from "@Definitions/Styled";
 import { appWithTranslation } from "@Server/i18n";
 import { AppWithStore } from "@Interfaces";
 import { makeStore } from "@Redux";
-import { CHAINS, CHAIN_RPC_URLS } from "src/Constants";
+import {
+  CHAINS,
+  MUTICALL_ADDRESSES,
+  RPC_URLS,
+  SUPPORT_CHAINS,
+} from "src/Constants";
 
 import "@Static/css/main.scss";
 // #endregion Local Imports
 
 const config: Config = {
-    readOnlyChainId: CHAINS.Ropsten,
-    readOnlyUrls: CHAIN_RPC_URLS,
+  readOnlyChainId: CHAINS.Rinkeby,
+  readOnlyUrls: RPC_URLS,
+  supportedChains: SUPPORT_CHAINS,
+  multicallAddresses: MUTICALL_ADDRESSES,
 };
 
 class WebApp extends App<AppWithStore> {
-    static async getInitialProps({
-        Component,
-        ctx,
-    }: AppContext): Promise<AppInitialProps> {
-        const pageProps = Component.getInitialProps
-            ? await Component.getInitialProps(ctx)
-            : {};
+  static async getInitialProps({
+    Component,
+    ctx,
+  }: AppContext): Promise<AppInitialProps> {
+    const pageProps = Component.getInitialProps
+      ? await Component.getInitialProps(ctx)
+      : {};
 
-        return { pageProps };
-    }
+    return { pageProps };
+  }
 
-    render() {
-        const { Component, pageProps, store } = this.props;
+  render() {
+    const { Component, pageProps, store } = this.props;
 
-        return (
-            <Provider store={store}>
-                <DAppProvider config={config}>
-                    <ThemeProvider theme={theme}>
-                        <Component {...pageProps} />
-                    </ThemeProvider>
-                </DAppProvider>
-            </Provider>
-        );
-    }
+    return (
+      <Provider store={store}>
+        <DAppProvider config={config}>
+          <ThemeProvider theme={theme}>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </DAppProvider>
+      </Provider>
+    );
+  }
 }
 
 export default withRedux(makeStore)(appWithTranslation(WebApp));

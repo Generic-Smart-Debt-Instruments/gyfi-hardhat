@@ -8,17 +8,21 @@ import { useSelector, useDispatch } from "react-redux";
 import { withTranslation } from "@Server/i18n";
 import { IStore } from "@Redux/IStore";
 import { HomeActions } from "@Actions";
+import Header from "@Components/Header";
 // #endregion Local Imports
 
 // #region Interface Imports
 import { IHomePage, ReduxNextPageContext } from "@Interfaces";
 // #endregion Interface Imports
 
-const Home: NextPage<IHomePage.IProps, IHomePage.InitialProps> = ({
-    t,
-    i18n,
-}) => {
-    return <div>Hello world</div>;
+import styles from "./index.module.scss";
+
+const Home: NextPage<IHomePage.IProps, IHomePage.InitialProps> = ({}) => {
+    return (
+        <div className={styles.wrapper}>
+            <Header />
+        </div>
+    );
 };
 
 Home.getInitialProps = async (
