@@ -23,8 +23,9 @@ describe("GYFICrowdsale", function() {
     gyfiWalletAddress = accounts[2];
     beneficiary = accounts[3];
 
-    GyfiToken = await ethers.getContractFactory("GYFIToken");
-    gyfiToken = await GyfiToken.deploy();
+    const GyfiToken = await ethers.getContractFactory("GYFIToken");
+    gyfiToken = await upgrades.deployProxy(GyfiToken,[deployerAddress.address]);
+    await gyfiToken.deployed();
 
     console.log(now.toNumber())
     console.log(time.duration.hours(1).toNumber())

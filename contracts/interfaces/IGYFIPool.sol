@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.3 <0.9.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "../interfaces/IGYFIStrategy.sol";
 
 /// @title Lending pool for purchasing GSDI via strategies.
 /// @author Crypto Shipwright
-interface IGYFIPool is IERC20 {
+interface IGYFIPool is IERC20Upgradeable {
     event Mint(address _staker, uint256 _amountCurrency);
     event Burn(address _staker, uint256 _amountShares);
 
@@ -23,7 +23,7 @@ interface IGYFIPool is IERC20 {
     /// @dev Uses IGYFIStrategy to find price. Calls IGYFIStrategy.withdraw.
     function burn(uint256 _amountShares) external;
 
-   // For snapshots, See openzeppelin's ERC20Snapshot.
+    // For snapshots, See openzeppelin's ERC20Snapshot.
 
     /// @notice Creates a new snapshot at the current block.
     function snapshot() external returns (uint256 _snapshotId);

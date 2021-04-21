@@ -6,26 +6,37 @@ import "./token/ERC677.sol";
 import "./token/ERC677Receiver.sol";
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Snapshot.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 
 /// @title Yield farming token for GSDI.
 /// @author jkp
-contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 {
-    using SafeERC20 for IERC20;
+contract GYFIToken is
+    IGYFIToken,
+    OwnableUpgradeable,
+    ERC20SnapshotUpgradeable,
+    ERC20BurnableUpgradeable,
+    ERC677
+{
+    using SafeERC20Upgradeable for IERC20Upgradeable;
     using SafeMath for uint256;
 
     mapping(address => bool) public isBlacklisted;
 
-    constructor() ERC20("GYFIToken", "GYFI") {
+    function intialize() public initializer {
+        __ERC20_init("GYFIToken", "GYFI");
         _mint(msg.sender, 10000000 ether);
     }
 
     /// @notice Allows the contract owner to blacklist accounts believed to be under the jurisdiction of the Securities Exchange Commission of the United States of America. Blacklisted accounts can send but not receive tokens.
-    function usaSecJurisdictionBlacklist(address _account, bool _isBlacklisted) public override onlyOwner {
+    function usaSecJurisdictionBlacklist(address _account, bool _isBlacklisted)
+        public
+        override
+        onlyOwner
+    {
         isBlacklisted[_account] = _isBlacklisted;
     }
 
@@ -36,7 +47,7 @@ contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 
         address to,
         uint256 value,
         bytes memory data
-    ) public override (IGYFIToken, ERC677) returns (bool success) {
+    ) public override(IGYFIToken, ERC677) returns (bool success) {
         transfer(to, value);
 
         emit Transfer(msg.sender, to, value, data);
@@ -53,19 +64,29 @@ contract GYFIToken is IGYFIToken, Ownable, ERC20Snapshot, ERC20Burnable, ERC677 
         return _snapshot();
     }
 
-    function balanceOfAt(address account, uint256 snapshotId) public view override(ERC20Snapshot, IGYFIToken) returns (uint256) {
-        return ERC20Snapshot.balanceOfAt(account, snapshotId);
+    function balanceOfAt(address account, uint256 snapshotId)
+        public
+        view
+        override(ERC20SnapshotUpgradeable, IGYFIToken)
+        returns (uint256)
+    {
+        return ERC20SnapshotUpgradeable.balanceOfAt(account, snapshotId);
     }
 
-    function totalSupplyAt(uint256 snapshotId) public view override(ERC20Snapshot, IGYFIToken) returns (uint256) {
-        return ERC20Snapshot.totalSupplyAt(snapshotId);
+    function totalSupplyAt(uint256 snapshotId)
+        public
+        view
+        override(ERC20SnapshotUpgradeable, IGYFIToken)
+        returns (uint256)
+    {
+        return ERC20SnapshotUpgradeable.totalSupplyAt(snapshotId);
     }
 
     function _beforeTokenTransfer(
         address from,
         address to,
         uint256 amount
-    ) internal override(ERC20, ERC20Snapshot) {
+    ) internal override(ERC20Upgradeable, ERC20SnapshotUpgradeable) {
         require(isBlacklisted[to] != true, "GYFIToken: Blacklisted user");
         super._beforeTokenTransfer(from, to, amount);
     }
