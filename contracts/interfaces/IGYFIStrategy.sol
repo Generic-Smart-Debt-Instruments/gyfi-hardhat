@@ -84,9 +84,9 @@ interface IGYFIStrategy {
         returns (
             uint256 purchaseTimestamp_,
             uint256 purchasePrice_,
-            uint256 endTimestamp_,
-            uint256 interestPerSecondWad_,
-            int256 profit_,
+            uint256 maturity_,
+            uint256 faceValue_,
+            address wallet_,
             GSDIStatus status_
         );
 

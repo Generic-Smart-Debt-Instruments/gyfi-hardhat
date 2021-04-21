@@ -13,9 +13,9 @@ abstract contract StrategyBase is IGYFIStrategy {
     struct GSDIInfo {
         uint256 purchaseTimestamp;
         uint256 purchasePrice;
-        uint256 endTimestamp;
-        uint256 interestPerSecondWad;
-        int256 profit;
+        uint256 maturity;
+        uint256 faceValue;
+        address wallet;
         GSDIStatus status;
     }
 
@@ -33,10 +33,7 @@ abstract contract StrategyBase is IGYFIStrategy {
     mapping(uint256 => GSDIInfo) public override gsdiInfo;
 
     modifier onlyPool() {
-        require(
-            msg.sender == pool,
-            "GSDI StrategyBase: Only callable by pool."
-        );
+        require(msg.sender == pool, "StrategyBase: Only callable by pool.");
         _;
     }
 
