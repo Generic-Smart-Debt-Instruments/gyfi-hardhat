@@ -63,15 +63,15 @@ interface IGYFIStrategy {
     /// @return sharePriceWad_ Current price per share in currency times 10**18.
     function sharePriceWad() external view returns (uint256 sharePriceWad_);
 
-    /// @notice Get the info for a GSDI currently held or held in the past by the strategy.
-    /// @dev Caution must be taken if a GSDI is removed and readded later. Most strategies should revert.
-    /// @param _id ID of the GSDI.
-    /// @return purchaseTimestamp_ Timestamp when the GSDI was purchased.
-    /// @return purchasePrice_ Price in currency that the GSDI was purchased at.
-    /// @return endTimestamp_ Timestamp when the GSDI was removed. Note that this is when the GSDI's removal was processed, not when it was covered.
-    /// @return interestPerSecondWad_ Interest per second times 10**18.
-    /// @return profit_ Profit (or loss) in currency when the GSDI was removed.
-    /// @return status_ Current status of the GSDI.
+    // @notice Get the info for a GSDI currently held or held in the past by the strategy.
+    // @dev Caution must be taken if a GSDI is removed and readded later. Most strategies should revert.
+    // @param _id ID of the GSDI.
+    // @return purchaseTimestamp_ Timestamp when the GSDI was purchased.
+    // @return purchasePrice_ Price in currency that the GSDI was purchased at.
+    // @return endTimestamp_ Timestamp when the GSDI was removed. Note that this is when the GSDI's removal was processed, not when it was covered.
+    // @return interestPerSecondWad_ Interest per second times 10**18.
+    // @return profit_ Profit (or loss) in currency when the GSDI was removed.
+    // @return status_ Current status of the GSDI.
     function gsdiInfo(uint256 _id)
         external
         view
@@ -99,7 +99,7 @@ interface IGYFIStrategy {
     /**
      * @dev Retrieves the interestperSecond at the block number.
      */
-    function interestPerSecondAt(address account, uint256 blockNumber)
+    function interestPerSecondAt(uint256 blockNumber)
         external
         view
         returns (uint256 amount_, uint256 timestamp_);
@@ -107,7 +107,7 @@ interface IGYFIStrategy {
     /**
      * @dev Retrieves the outstandingExpectedInterest at the timestamp.
      */
-    function outstandingExpectedInterestAt(address account, uint256 blockNumber)
+    function outstandingExpectedInterestAt(uint256 blockNumber)
         external
         view
         returns (uint256 amount_, uint256 timestamp_);
