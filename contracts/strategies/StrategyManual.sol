@@ -29,17 +29,18 @@ contract StrategyManual is StrategyBase, AccessControl {
         address _pool,
         IERC20 _currency,
         IGAUC _gauc,
-        address feeRecipient
+        address _feeRecipient
     ) StrategyBase(_pool, _currency) {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         gauc = _gauc;
+        feeRecipient = _feeRecipient;
     }
 
-    function withdrawFromGauc() external onlyHarvester {
+    function withdraw() external onlyHarvester {
         gauc.withdraw(gauc.balanceAvailable(address(this)));
     }
 
-    function bidGSDI(uint256 _auctionId, uint256 _faceValue)
+    function bid(uint256 _auctionId, uint256 _faceValue)
         external
         onlyHarvester
     {
@@ -58,7 +59,7 @@ contract StrategyManual is StrategyBase, AccessControl {
         gauc.bid(_auctionId, _faceValue);
     }
 
-    function claimGSDI(uint256 _auctionId) external onlyHarvester {
+    function claim(uint256 _auctionId) external onlyHarvester {
         gauc.claim(_auctionId);
         (, uint256 lowestBid, uint256 maturity, uint256 price, , , , , ) =
             gauc.auctionInfo(_auctionId);
@@ -67,6 +68,20 @@ contract StrategyManual is StrategyBase, AccessControl {
         interestPerSecond = interestPerSecond.add(
             _getInterestPerSecond(block.timestamp, maturity, price, lowestBid)
         );
+    }
+
+    function processCover(uint256 _auctionId) external onlyHarvester {
+        (
+            ,
+            uint256 lowestBid,
+            uint256 maturity,
+            uint256 price,
+            ,
+            address IGSDIWallet_,
+            ,
+            ,
+
+        ) = gauc.auctionInfo(_auctionId);
     }
 
     function _updateOutstandingExpectedInterest() internal {
