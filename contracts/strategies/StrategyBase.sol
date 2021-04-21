@@ -7,14 +7,8 @@ import "../interfaces/IGYFIStrategy.sol";
 
 /// @title Strategy interface for implementing custom strategies to purchase GSDI.
 /// @author Crypto Shipwright
-contract StrategyBase is IGYFIStrategy {
+abstract contract StrategyBase is IGYFIStrategy {
     using SafeMath for uint256;
-
-    struct  Checkpoint {
-        uint64 fromBlock;
-        uint64 timestamp;
-        uint128 value;
-    }
 
     struct GSDIInfo {
         uint256 purchaseTimestamp;
@@ -32,109 +26,88 @@ contract StrategyBase is IGYFIStrategy {
     uint256 public override outstandingFaceValue;
     uint256 public override totalWithdraws;
     uint256 public override totalFees;
-
-    Checkpoint[] interestPerSecondHistory;
-    Checkpoint[] outstandingExpectedInterestHistory;
+    uint256 public override interestPerSecond;
+    uint256 public override outstandingExpectedInterest;
+    uint256 public override timestampLastInterestUpdate;
 
     mapping(uint256 => GSDIInfo) public override gsdiInfo;
 
     modifier onlyPool() {
-        require(msg.sender == pool, "GSDI StrategyBase: Only callable by pool.");
+        require(
+            msg.sender == pool,
+            "GSDI StrategyBase: Only callable by pool."
+        );
         _;
     }
 
-    function totalValue() public view override returns (uint256 totalValue_)
-    {
-        if(realizedProfit > 0) {
-            return outstandingExpectedInterest().add(totalDeposits).sub(totalWithdraws).sub(totalFees).add(uint256(realizedProfit));
+    constructor(address _pool, IERC20 _currency) {
+        pool = _pool;
+        currency = _currency;
+    }
+
+    function totalValue() public view override returns (uint256 totalValue_) {
+        if (realizedProfit > 0) {
+            return
+                outstandingExpectedInterest
+                    .add(totalDeposits)
+                    .sub(totalWithdraws)
+                    .sub(totalFees)
+                    .add(uint256(realizedProfit));
         } else {
-            return outstandingExpectedInterest().add(totalDeposits).sub(totalWithdraws).sub(totalFees).sub(uint256(realizedProfit));
-        }        
-    }
-    
-    function outstandingExpectedInterest()
-        public
-        view
-        override
-        returns (uint256 outstandingExpectedInterest_) 
-    {
-        (uint256 interest, uint256 timestamp) = outstandingExpectedInterestAt(block.number);
-        outstandingExpectedInterest_ = interest.add(
-            interestPerSecond().mul(block.timestamp.sub(timestamp))
-        );
+            return
+                outstandingExpectedInterest
+                    .add(totalDeposits)
+                    .sub(totalWithdraws)
+                    .sub(totalFees)
+                    .sub(uint256(realizedProfit));
+        }
     }
 
-    function interestPerSecond()
-        public
+    function sharePriceWad()
+        external
         view
         override
-        returns (uint256 interestPerSecond_)
+        returns (uint256 sharePriceWad_)
     {
-        (interestPerSecond_,) = interestPerSecondAt(block.number);
-    }
-
-    function sharePriceWad() external view override returns (uint256 sharePriceWad_) {
         return totalValue().mul(10**18).div(IERC20(pool).totalSupply());
     }
 
-    function withdraw(uint256 _amount, address receiver) override external onlyPool {
-        currency.transferFrom(receiver, address(this), _amount);
-    }
-
-    function deposit(uint256 _amount, address sender) override external onlyPool {
-        currency.transfer(sender, _amount);
-    }   
-
-    function interestPerSecondAt(uint256 blockNumber)
-        public
-        view
+    function withdraw(uint256 _amount, address _receiver)
+        external
         override
-        returns (uint256 amount_, uint256 timestamp_)
+        onlyPool
     {
-        return getValueAt(interestPerSecondHistory, blockNumber);
+        _preWithdraw(_amount, _receiver);
+        totalWithdraws = totalWithdraws.add(_amount);
+        require(
+            currency.transferFrom(_receiver, address(this), _amount),
+            "StrategyBase: transfer failed"
+        );
+        _postWithdraw(_amount, _receiver);
     }
 
-    function outstandingExpectedInterestAt(uint256 blockNumber)
-        public
-        view
+    function deposit(uint256 _amount, address _sender)
+        external
         override
-        returns (uint256 amount_, uint256 timestamp_)
+        onlyPool
     {
-        return getValueAt(outstandingExpectedInterestHistory, blockNumber);
+        _preDeposit(_amount, _sender);
+        totalDeposits = totalDeposits.add(_amount);
+        currency.transfer(_sender, _amount);
+        _postDeposit(_amount, _sender);
     }
 
-    function getValueAt(Checkpoint[] storage checkpoints, uint _block) view internal returns (uint value_, uint timestamp_) {
-        if (checkpoints.length == 0) return (0,0);
+    function _preWithdraw(uint256 _amount, address _receiver)
+        internal
+        virtual
+    {}
 
-        // Shortcut for the actual value
-        if (_block >= checkpoints[checkpoints.length-1].fromBlock)
-            return (checkpoints[checkpoints.length-1].value, checkpoints[checkpoints.length-1].timestamp);
-        if (_block < checkpoints[0].fromBlock) return (0,0);
+    function _postWithdraw(uint256 _amount, address _receiver)
+        internal
+        virtual
+    {}
 
-        // Binary search of the value in the array
-        uint min = 0;
-        uint max = checkpoints.length-1;
-        while (max > min) {
-            uint mid = (max + min + 1)/ 2;
-            if (checkpoints[mid].fromBlock<=_block) {
-                min = mid;
-            } else {
-                max = mid-1;
-            }
-        }
-        return (checkpoints[min].value, checkpoints[min].timestamp);
-    }
+    function _preDeposit(uint256 _amount, address _sender) internal virtual {}
 
-    function updateValueAtNow(Checkpoint[] storage checkpoints, uint _value) internal  {
-        if ((checkpoints.length == 0)
-        || (checkpoints[checkpoints.length -1].fromBlock < block.number)) {
-               Checkpoint storage newCheckPoint = checkpoints[ checkpoints.length+1 ];
-               newCheckPoint.fromBlock =  uint64(block.number);
-               newCheckPoint.timestamp =  uint64(block.timestamp);
-               newCheckPoint.value = uint128(_value);
-           } else {
-               Checkpoint storage oldCheckPoint = checkpoints[checkpoints.length-1];
-               oldCheckPoint.value = uint128(_value);
-           }
-    }
+    function _postDeposit(uint256 _amount, address _sender) internal virtual {}
 }

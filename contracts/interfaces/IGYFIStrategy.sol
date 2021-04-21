@@ -39,6 +39,12 @@ interface IGYFIStrategy {
         view
         returns (uint256 outstandingExpectedInterest_);
 
+    /// @return timestampLastInterestUpdate_ Timestamp the outstanding expecteed interest was last updated.
+    function timestampLastInterestUpdate()
+        external
+        view
+        returns (uint256 timestampLastInterestUpdate_);
+
     /// @dev Update realized profit whenever a GSDI is removed. May be negative.
     /// @return realizedProfit_ Current realized profit from covered, seized, and sold GSDIs.
     function realizedProfit() external view returns (int256 realizedProfit_);
@@ -91,24 +97,4 @@ interface IGYFIStrategy {
     /// @notice Deposit currency to the contract. Only callable by pool.
     /// @param _amount Amount of currency to deposit.
     function deposit(uint256 _amount, address sender) external;
-
-    //////////////////////////////////////////
-    // For snapshots, See the MiniMe token. //
-    //////////////////////////////////////////
-
-    /**
-     * @dev Retrieves the interestperSecond at the block number.
-     */
-    function interestPerSecondAt(uint256 blockNumber)
-        external
-        view
-        returns (uint256 amount_, uint256 timestamp_);
-
-    /**
-     * @dev Retrieves the outstandingExpectedInterest at the timestamp.
-     */
-    function outstandingExpectedInterestAt(uint256 blockNumber)
-        external
-        view
-        returns (uint256 amount_, uint256 timestamp_);
 }
