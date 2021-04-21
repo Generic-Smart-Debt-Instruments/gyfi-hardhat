@@ -7,7 +7,6 @@ import styles from "./index.module.scss";
 
 const Header = () => {
   const { activateBrowserWallet, account, chainId } = useEthers();
-  console.log(account);
 
   return (
     <div className={styles.header}>
