@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "./StrategyBase.sol";
 import "./IGAUC.sol";
+import "./IGSDIWallet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
@@ -61,27 +62,62 @@ contract StrategyManual is StrategyBase, AccessControl {
 
     function claim(uint256 _auctionId) external onlyHarvester {
         gauc.claim(_auctionId);
-        (, uint256 lowestBid, uint256 maturity, uint256 price, , , , , ) =
-            gauc.auctionInfo(_auctionId);
-        outstandingFaceValue = outstandingFaceValue.add(lowestBid);
-        _updateOutstandingExpectedInterest();
-        interestPerSecond = interestPerSecond.add(
-            _getInterestPerSecond(block.timestamp, maturity, price, lowestBid)
-        );
-    }
-
-    function processCover(uint256 _auctionId) external onlyHarvester {
         (
-            ,
+            uint256 auctionEndTimestamp,
             uint256 lowestBid,
             uint256 maturity,
             uint256 price,
             ,
-            address IGSDIWallet_,
+            ,
             ,
             ,
 
         ) = gauc.auctionInfo(_auctionId);
+        outstandingFaceValue = outstandingFaceValue.add(lowestBid);
+        _updateOutstandingExpectedInterest();
+        uint256 interestPerSecondGSDI =
+            _getInterestPerSecond(
+                auctionEndTimestamp,
+                maturity,
+                price,
+                lowestBid
+            );
+        outstandingExpectedInterest = outstandingExpectedInterest.add(
+            interestPerSecondGSDI.mul(block.timestamp.sub(auctionEndTimestamp))
+        );
+        interestPerSecond = interestPerSecond.add(interestPerSecondGSDI);
+    }
+
+    function processCover(uint256 _auctionId) external onlyHarvester {
+        (
+            uint256 auctionEndTimestamp,
+            uint256 lowestBid,
+            uint256 maturity,
+            uint256 price,
+            ,
+            ,
+            ,
+            ,
+
+        ) = gauc.auctionInfo(_auctionId);
+        _updateOutstandingExpectedInterest();
+        uint256 interestPerSecondGSDI =
+            _getInterestPerSecond(block.timestamp, maturity, price, lowestBid);
+        uint256 totalInterestAdded =
+            interestPerSecondGSDI.mul(block.timestamp.sub(auctionEndTimestamp));
+        outstandingExpectedInterest = outstandingExpectedInterest.sub(
+            totalInterestAdded
+        );
+        interestPerSecond = interestPerSecond.sub(interestPerSecondGSDI);
+        realizedProfit = realizedProfit + int256(lowestBid.sub(price));
+    }
+
+    function seize(uint256 _id) external onlyHarvester {
+        //TODO: seize the NFT and transfer the wallet to the harvester to process
+    }
+
+    function liquidate(uint256 _amount) external onlyHarvester {
+        //TODO: harvester, after manually processing the seized wallet, returns the revenue from liquidation.
     }
 
     function _updateOutstandingExpectedInterest() internal {
