@@ -1,4 +1,4 @@
-import Button from "@Components/Button";
+import Button from "@Components/common/Button";
 import { useEthers } from "@usedapp/core";
 import React from "react";
 import { CHAIN_LABELS } from "src/Constants";
