@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 // import { useEthers } from "@usedapp/core";
 // import { CHAIN_LABELS } from "@Constants";
 
@@ -10,10 +11,7 @@ const HomeContainer = () => {
       <h2>Links</h2>
       <ul>
         <li>
-          GYFI Token Sales:{" "}
-          <a target="_blank" href="/sale">
-            /sale
-          </a>
+          GYFI Token Sales: <Link href="/sale">/sale</Link>
         </li>
         <li>
           Whitepapers:{" "}
