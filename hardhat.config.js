@@ -13,13 +13,28 @@ module.exports = {
   networks: {
     hardhat: {},
     ropsten: {
-      url: `https://ropsten.infura.io/v3/${keys.networks.ropsten.infuraKey}`,
-      accounts: [keys.networks.ropsten.privateKey],
+      url: `https://ropsten.infura.io/v3/${keys.infuraKey}`,
+      accounts: [keys.privateKey],
+      gasMultiplier: 1.1,
+    },
+    rinkeby: {
+      url: `https://rinkeby.infura.io/v3/${keys.infuraKey}`,
+      accounts: [keys.privateKey],
       gasMultiplier: 1.1,
     },
     mainnet: {
-      url: `https://mainnet.infura.io/v3/${keys.networks.mainnet.infuraKey}`,
-      accounts: [keys.networks.mainnet.privateKey],
+      url: `https://mainnet.infura.io/v3/${keys.infuraKey}`,
+      accounts: [keys.privateKey],
+      gasMultiplier: 1.1,
+    },
+    xdai: {
+      url: `https://rpc.xdaichain.com`,
+      accounts: [keys.privateKey],
+      gasMultiplier: 1.1,
+    },
+    bsc: {
+      url: `https://bsc-dataseed.binance.org`,
+      accounts: [keys.privateKey],
       gasMultiplier: 1.1,
     },
   },
