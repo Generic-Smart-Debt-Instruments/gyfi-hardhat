@@ -17,7 +17,7 @@ const Header = () => {
             {chainId && (
               <span className={styles.network}>{CHAIN_LABELS[chainId]}</span>
             )}
-            <span>{`Account: ${account}`}</span>
+            <span className={styles.account}>{`${account}`}</span>
           </div>
         ) : (
           <Button onClick={() => activateBrowserWallet()}>

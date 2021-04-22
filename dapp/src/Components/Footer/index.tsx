@@ -7,7 +7,7 @@ import { IFooter } from "./Footer";
 // #endregion Local Imports
 
 const Footer: React.FunctionComponent<IFooter.IProps> = (): JSX.Element => {
-    return <div className="footer">Footer</div>;
+    return <footer className="footer">Footer</footer>;
 };
 
 export { Footer };

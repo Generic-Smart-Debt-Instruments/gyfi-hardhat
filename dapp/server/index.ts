@@ -19,7 +19,7 @@ const handler = routes.getRequestHandler(app);
 app.prepare().then(() => {
     const server = express();
 
-    app.setAssetPrefix(process.env.STATIC_PATH);
+    app.setAssetPrefix(process.env.STATIC_PATH as string);
     server.use(express.static(path.join(__dirname, "../public/static")));
     server.use(nextI18NextMiddleware(nextI18next));
 
