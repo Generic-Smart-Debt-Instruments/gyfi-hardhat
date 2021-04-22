@@ -3,15 +3,17 @@ import React, { FC, ReactNode } from "react";
 import styles from "./index.module.scss";
 
 interface IButton {
-    children: ReactNode;
+  type?: "button" | "submit";
+  children: ReactNode;
+  onClick?: () => void;
 }
 
-const Button: FC<IButton> = ({ children, ...otherProps }) => {
-    return (
-        <button {...otherProps} className={styles.button}>
-            {children}
-        </button>
-    );
+const Button: FC<IButton> = ({ type = "button", children, onClick }) => {
+  return (
+    <button type={type} onClick={onClick} className={styles.button}>
+      {children}
+    </button>
+  );
 };
 
 export default Button;

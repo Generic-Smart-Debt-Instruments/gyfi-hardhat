@@ -1,7 +1,8 @@
-import Button from "@Components/common/Button";
-import { useEthers } from "@usedapp/core";
 import React from "react";
-import { CHAIN_LABELS } from "src/Constants";
+import { useEthers } from "@usedapp/core";
+
+import Button from "@Components/common/Button";
+import { CHAIN_LABELS } from "@Constants";
 
 import styles from "./index.module.scss";
 

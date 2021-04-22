@@ -1,12 +1,12 @@
 // #region Global Imports
 import * as React from "react";
 import { NextPage } from "next";
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelector, useDispatch } from "react-redux";
 // #endregion Global Imports
 
 // #region Local Imports
 import { withTranslation } from "@Server/i18n";
-import { IStore } from "@Redux/IStore";
+// import { IStore } from "@Redux/IStore";
 import { HomeActions } from "@Actions";
 import Header from "@Components/common/Header";
 import HomeContainer from "@Components/home/HomeContainer";
