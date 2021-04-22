@@ -12,11 +12,6 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {},
-    ropsten: {
-      url: `https://ropsten.infura.io/v3/${keys.infuraKey}`,
-      accounts: [keys.privateKey],
-      gasMultiplier: 1.1,
-    },
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${keys.infuraKey}`,
       accounts: [keys.privateKey],
