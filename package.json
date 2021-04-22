@@ -27,6 +27,7 @@
     "web3": "^1.3.5"
   },
   "dependencies": {
+    "@aave/protocol-v2": "^1.0.1",
     "gauc": "https://github.com/Generic-Smart-Debt-Instruments/gauc-hardhat#main",
     "gsdi": "https://github.com/Generic-Smart-Debt-Instruments/gsdi-hardhat#main"
   }

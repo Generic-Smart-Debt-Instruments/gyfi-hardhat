@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract StrategyManual is StrategyBase, AccessControl {
     //TODO: add management fees
+    //TODO: hold unused dai in aave
     using SafeMath for uint256;
 
     bytes32 public constant HARVESTER_ROLE = keccak256("HARVESTER_ROLE");
@@ -102,6 +103,10 @@ contract StrategyManual is StrategyBase, AccessControl {
         require(
             info.status == GSDIStatus.OPEN,
             "StrategyManual: gsdiInfo.status is not open"
+        );
+        require(
+            !gsdi.exists(_tokenId),
+            "StrategyManual: token has not been covered."
         );
         gsdiInfo[_tokenId].status = GSDIStatus.COVER;
         _updateInterestOnRemovingGSDI(info);
