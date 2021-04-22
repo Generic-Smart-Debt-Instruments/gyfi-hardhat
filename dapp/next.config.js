@@ -18,6 +18,7 @@ const nextConfig = {
   exportPathMap: function() {
     return {
       "/": { page: "/home" },
+      "/sale": { page: "/sale" },
     };
   },
 };
