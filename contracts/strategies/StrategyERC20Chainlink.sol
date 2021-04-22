@@ -6,10 +6,10 @@ import "gauc/contracts/interfaces/IGAUC.sol";
 import "gsdi/contracts/interfaces/IGSDINFT.sol";
 import "gsdi/contracts/interfaces/IGSDIWallet.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import {ILendingPool} from "@aave/protocol-v2/contracts/interfaces/ILendingPool.sol";
+import "../interfaces/ILendingPoolAaveMin.sol";
 
-/// @dev Uses a Chainlink oracle for the ERC20 token. See the chainlink documentation.
-contract StrategyERC20Chainlink is StrategyBase {
+/// @dev Single collateral strategy. Uses a Chainlink oracle for the ERC20 token. See the chainlink documentation.
+abstract contract StrategyERC20Chainlink is StrategyBase {
     using SafeMath for uint256;
 
     /// @notice Address responsible for setting parameters.
