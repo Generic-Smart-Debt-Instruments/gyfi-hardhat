@@ -39,6 +39,12 @@ interface IGYFIStrategy {
         view
         returns (uint256 outstandingExpectedInterest_);
 
+    /// @return timestampLastInterestUpdate_ Timestamp the outstanding expecteed interest was last updated.
+    function timestampLastInterestUpdate()
+        external
+        view
+        returns (uint256 timestampLastInterestUpdate_);
+
     /// @dev Update realized profit whenever a GSDI is removed. May be negative.
     /// @return realizedProfit_ Current realized profit from covered, seized, and sold GSDIs.
     function realizedProfit() external view returns (int256 realizedProfit_);
@@ -63,24 +69,24 @@ interface IGYFIStrategy {
     /// @return sharePriceWad_ Current price per share in currency times 10**18.
     function sharePriceWad() external view returns (uint256 sharePriceWad_);
 
-    /// @notice Get the info for a GSDI currently held or held in the past by the strategy.
-    /// @dev Caution must be taken if a GSDI is removed and readded later. Most strategies should revert.
-    /// @param _id ID of the GSDI.
-    /// @return purchaseTimestamp_ Timestamp when the GSDI was purchased.
-    /// @return purchasePrice_ Price in currency that the GSDI was purchased at.
-    /// @return endTimestamp_ Timestamp when the GSDI was removed. Note that this is when the GSDI's removal was processed, not when it was covered.
-    /// @return interestPerSecondWad_ Interest per second times 10**18.
-    /// @return profit_ Profit (or loss) in currency when the GSDI was removed.
-    /// @return status_ Current status of the GSDI.
+    // @notice Get the info for a GSDI currently held or held in the past by the strategy.
+    // @dev Caution must be taken if a GSDI is removed and readded later. Most strategies should revert.
+    // @param _id ID of the GSDI.
+    // @return purchaseTimestamp_ Timestamp when the GSDI was purchased.
+    // @return purchasePrice_ Price in currency that the GSDI was purchased at.
+    // @return endTimestamp_ Timestamp when the GSDI was removed. Note that this is when the GSDI's removal was processed, not when it was covered.
+    // @return interestPerSecondWad_ Interest per second times 10**18.
+    // @return profit_ Profit (or loss) in currency when the GSDI was removed.
+    // @return status_ Current status of the GSDI.
     function gsdiInfo(uint256 _id)
         external
         view
         returns (
             uint256 purchaseTimestamp_,
             uint256 purchasePrice_,
-            uint256 endTimestamp_,
-            uint256 interestPerSecondWad_,
-            int256 profit_,
+            uint256 maturity_,
+            uint256 faceValue_,
+            address wallet_,
             GSDIStatus status_
         );
 
@@ -91,24 +97,4 @@ interface IGYFIStrategy {
     /// @notice Deposit currency to the contract. Only callable by pool.
     /// @param _amount Amount of currency to deposit.
     function deposit(uint256 _amount, address sender) external;
-
-    //////////////////////////////////////////
-    // For snapshots, See the MiniMe token. //
-    //////////////////////////////////////////
-
-    /**
-     * @dev Retrieves the interestperSecond at the block number.
-     */
-    function interestPerSecondAt(address account, uint256 blockNumber)
-        external
-        view
-        returns (uint256 amount_, uint256 timestamp_);
-
-    /**
-     * @dev Retrieves the outstandingExpectedInterest at the timestamp.
-     */
-    function outstandingExpectedInterestAt(address account, uint256 blockNumber)
-        external
-        view
-        returns (uint256 amount_, uint256 timestamp_);
 }
