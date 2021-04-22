@@ -9,7 +9,7 @@ import { withTranslation } from "@Server/i18n";
 // import { IStore } from "@Redux/IStore";
 import { HomeActions } from "@Actions";
 import Header from "@Components/common/Header";
-import HomeContainer from "@Components/home/HomeContainer";
+import SaleCard from "@Components/common/SaleCard";
 // #endregion Local Imports
 
 // #region Interface Imports
@@ -18,16 +18,16 @@ import { IHomePage, ReduxNextPageContext } from "@Interfaces";
 
 import styles from "./index.module.scss";
 
-const Home: NextPage<IHomePage.IProps, IHomePage.InitialProps> = ({}) => {
+const Sale: NextPage<IHomePage.IProps, IHomePage.InitialProps> = ({}) => {
   return (
     <div className={styles.wrapper}>
       <Header />
-      <HomeContainer />
+      <SaleCard />
     </div>
   );
 };
 
-Home.getInitialProps = async (
+Sale.getInitialProps = async (
   ctx: ReduxNextPageContext
 ): Promise<IHomePage.InitialProps> => {
   await ctx.store.dispatch(
@@ -38,6 +38,6 @@ Home.getInitialProps = async (
   return { namespacesRequired: ["common"] };
 };
 
-const Extended = withTranslation("common")(Home);
+const Extended = withTranslation("common")(Sale);
 
 export default Extended;

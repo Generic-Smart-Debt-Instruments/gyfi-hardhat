@@ -1,5 +1,5 @@
-import Button from "@Components/common/Button";
 import React from "react";
+import Button from "@Components/common/Button";
 
 import styles from "./index.module.scss";
 
@@ -9,7 +9,7 @@ const HomeContainer = () => {
       <h3>Next Sale</h3>
       <ul>
         <li>
-          Network: <Button variantClass={styles.button}>{"BSC"}</Button>
+          Network: <Button>{"BSC"}</Button>
         </li>
         <li>Start Countdown: {"00:00:00"}</li>
         <li>End Countdown: {"00:00:00"}</li>

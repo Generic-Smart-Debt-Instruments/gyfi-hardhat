@@ -1,7 +1,8 @@
-import Button from "@Components/common/Button";
-import { useEthers } from "@usedapp/core";
 import React from "react";
-import { CHAIN_LABELS } from "src/Constants";
+import { useEthers } from "@usedapp/core";
+
+import Button from "@Components/common/Button";
+import { CHAIN_LABELS } from "@Constants";
 
 import styles from "./index.module.scss";
 
@@ -10,14 +11,14 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      GYFI
+      <a href="/">GYFI</a>
       <section className={styles.actions}>
         {account ? (
           <div className={styles.info}>
             {chainId && (
               <span className={styles.network}>{CHAIN_LABELS[chainId]}</span>
             )}
-            <span>{`Account: ${account}`}</span>
+            <span className={styles.account}>{`${account}`}</span>
           </div>
         ) : (
           <Button onClick={() => activateBrowserWallet()}>

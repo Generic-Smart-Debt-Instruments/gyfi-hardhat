@@ -1,18 +1,18 @@
 import React, { FC, ReactNode } from "react";
-import BaseButton, { ButtonProps } from "@material-ui/core/Button";
 
 import styles from "./index.module.scss";
 
-interface IButton extends Partial<ButtonProps> {
+interface IButton {
+  type?: "button" | "submit";
   children: ReactNode;
-  variantClass?: string;
+  onClick?: () => void;
 }
 
-const Button: FC<IButton> = ({ children, variantClass, ...otherProps }) => {
+const Button: FC<IButton> = ({ type = "button", children, onClick }) => {
   return (
-    <BaseButton {...otherProps} className={`${styles.button} ${variantClass}`}>
+    <button type={type} onClick={onClick} className={styles.button}>
       {children}
-    </BaseButton>
+    </button>
   );
 };
 
