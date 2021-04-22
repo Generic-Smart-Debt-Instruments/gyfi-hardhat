@@ -42,8 +42,6 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
 
     // The GYFI TOKEN!
     GYFIToken public gyfi;
-    // Gov address.
-    address public governance;
     // Dev address.
     address public devaddr;
     // Block number when bonus GYFI period ends.
@@ -61,24 +59,14 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
     // The block number when GYFI mining starts.
     uint256 public override startBlock;
 
-    /**
-     * @dev Throws if called by any account other than the owner.
-     */
-    modifier onlyGovernance() {
-        require(governance == _msgSender(), "Ownable: caller is not the owner");
-        _;
-    }
-
     constructor(
         GYFIToken _gyfi,
-        address _governance,
         address _devaddr,
         uint256 _gyfiPerBlock,
         uint256 _startBlock,
         uint256 _bonusEndBlock
     ) {
         gyfi = _gyfi;
-        governance = _governance;
         devaddr = _devaddr;
         gyfiPerBlock = _gyfiPerBlock;
         bonusEndBlock = _bonusEndBlock;
@@ -290,7 +278,7 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
 
     /// @notice Set the bonus multiplier. only callable by governance
     /// @param _bonusMultiplier new bonus mulitplier to be set.
-    function setMultiplier(uint256 _bonusMultiplier) public onlyGovernance {
+    function setMultiplier(uint256 _bonusMultiplier) public onlyOwner {
         bonusMultiplier = _bonusMultiplier;
     }
 }
