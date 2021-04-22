@@ -2,9 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "./StrategyBase.sol";
-import "./IGAUC.sol";
-import "./IGSDINFT.sol";
-import "./IGSDIWallet.sol";
+import "gauc/contracts/interfaces/IGAUC.sol";
+import "gsdi/contracts/interfaces/IGSDINFT.sol";
+import "gsdi/contracts/interfaces/IGSDIWallet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 

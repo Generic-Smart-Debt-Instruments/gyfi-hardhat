@@ -4031,6 +4031,12 @@ ganache-core@^2.13.2:
     ethereumjs-wallet "0.6.5"
     web3 "1.2.11"
 
+"gauc@https://github.com/Generic-Smart-Debt-Instruments/gauc-hardhat#main":
+  version "1.0.0"
+  resolved "https://github.com/Generic-Smart-Debt-Instruments/gauc-hardhat#9d4887d7c4a9bedf4adcf74cb7b128dd795bd6ae"
+  dependencies:
+    gsdi "https://github.com/Generic-Smart-Debt-Instruments/gsdi-hardhat#main"
+
 get-caller-file@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-1.0.3.tgz#f978fa4c90d1dfe7ff2d6beda2a515e713bdcf4a"
@@ -4225,6 +4231,12 @@ growl@1.10.5:
   version "1.10.5"
   resolved "https://registry.yarnpkg.com/growl/-/growl-1.10.5.tgz#f2735dc2283674fa67478b10181059355c369e5e"
   integrity sha512-qBr4OuELkhPenW6goKVXiv47US3clb3/IbuWF9KNKEijAy9oeHxU9IgzjvJhHkUzhaj7rOUD7+YGWqUjLp5oSA==
+
+"gsdi@https://github.com/Generic-Smart-Debt-Instruments/gsdi-hardhat#main":
+  version "1.0.0"
+  resolved "https://github.com/Generic-Smart-Debt-Instruments/gsdi-hardhat#7736734ffa9a1cb40ee39e690c7283886a059c90"
+  dependencies:
+    "@openzeppelin/contracts-upgradeable" "^4.0.0"
 
 handlebars@^4.0.1:
   version "4.7.7"
