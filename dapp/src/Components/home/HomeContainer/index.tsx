@@ -30,7 +30,7 @@ const HomeContainer = () => {
         <b>GAUC</b> - GSDI Auction is the first dapp to be build on GSDI. It allows the auction of proposed ERC20/721 collateralized bonds.
       </p>
       <p>
-        <b>GPOD</b> - GSDI Pools allow lenders to deposit Dai into strategies which purchase GSDI to earn interest. Any developer may deploy new pools and strategies.
+        <b>GSDI Pools</b> - GSDI Pools allow lenders to deposit Dai into strategies which purchase GSDI to earn interest. Any developer may deploy new pools and strategies.
       </p>
 
     </>
