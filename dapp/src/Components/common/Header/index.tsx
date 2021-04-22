@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <div className={styles.header}>
-      GYFI
+      <a href="/">GYFI</a>
       <section className={styles.actions}>
         {account ? (
           <div className={styles.info}>

@@ -3,13 +3,13 @@ import React from "react";
 
 import styles from "./index.module.scss";
 
-const HomeContainer = () => {
+const SaleCard = () => {
   return (
-    <div className={styles.container}>
-      <table>
+    <>
+      <table >
         <th colspan="2">{"Sale name"}</th>
         <tr>
-          <td>Network:</td><td><Button variantClass={styles.button}>{"BSC"}</Button></td>
+          <td>Network:</td><td><Button >{"BSC"}</Button></td>
         </tr>
         <tr><td>Start Countdown</td><td>{"00:00:00"}</td></tr>
         <tr><td>End Countdown</td><td>{"00:00:00"}</td></tr>
@@ -27,8 +27,8 @@ const HomeContainer = () => {
           <td>Contract Address:</td><td><a href={"#"}>{"0xABC"}</a></td>
         </tr>
       </table>
-    </div>
+    </>
   );
 };
 
-export default HomeContainer;
+export default SaleCard;
