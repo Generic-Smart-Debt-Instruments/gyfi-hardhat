@@ -48,8 +48,6 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
     uint256 public override bonusEndBlock;
     // GYFI tokens created per block.
     uint256 public override gyfiPerBlock;
-    // Bonus muliplier for early gyfi makers.
-    uint256 public bonusMultiplier = 10;
     // Info of each pool.
     PoolInfo[] public override poolInfo;
     // Info of each user that stakes LP tokens.
@@ -65,7 +63,7 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         uint256 _gyfiPerBlock,
         uint256 _startBlock,
         uint256 _bonusEndBlock
-    ) {
+    ) Ownable() {
         gyfi = _gyfi;
         devaddr = _devaddr;
         gyfiPerBlock = _gyfiPerBlock;
@@ -121,26 +119,6 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         poolInfo[_pid].allocPoint = _allocPoint;
     }
 
-    /// @notice Return reward multiplier over the given _from to _to block.
-    /// @param _from start block number.
-    /// @param _to end block number.
-    function getMultiplier(uint256 _from, uint256 _to)
-        public
-        view
-        returns (uint256)
-    {
-        if (_to <= bonusEndBlock) {
-            return _to.sub(_from).mul(bonusMultiplier);
-        } else if (_from >= bonusEndBlock) {
-            return _to.sub(_from);
-        } else {
-            return
-                bonusEndBlock.sub(_from).mul(bonusMultiplier).add(
-                    _to.sub(bonusEndBlock)
-                );
-        }
-    }
-
     /// @notice The amount of GYFI pending for the farmer in a pool.
     /// @param _pid Unique ID for the pool.
     /// @param _user Address of the farmer.
@@ -156,12 +134,8 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         uint256 accGyfiPerShare = pool.accGyfiPerShare;
         uint256 lpSupply = pool.token.balanceOf(address(this));
         if (block.number > pool.lastRewardBlock && lpSupply != 0) {
-            uint256 multiplier =
-                getMultiplier(pool.lastRewardBlock, block.number);
             uint256 gyfiReward =
-                multiplier.mul(gyfiPerBlock).mul(pool.allocPoint).div(
-                    totalAllocPoint
-                );
+                gyfiPerBlock.mul(pool.allocPoint).div(totalAllocPoint);
             accGyfiPerShare = accGyfiPerShare.add(
                 gyfiReward.mul(1e12).div(lpSupply)
             );
@@ -189,14 +163,14 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
             pool.lastRewardBlock = block.number;
             return;
         }
-        uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         uint256 gyfiReward =
-            multiplier.mul(gyfiPerBlock).mul(pool.allocPoint).div(
-                totalAllocPoint
-            );
+            gyfiPerBlock.mul(pool.allocPoint).div(totalAllocPoint);
 
         // no mint -> governance has to transfer tokens to masterchef
-        gyfi.transfer(devaddr, gyfiReward.div(10));
+        require(
+            gyfi.transfer(devaddr, gyfiReward),
+            "GYFIMasterChef: Transfer Failed"
+        );
 
         pool.accGyfiPerShare = pool.accGyfiPerShare.add(
             gyfiReward.mul(1e12).div(lpSupply)
@@ -216,7 +190,11 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
                 user.amount.mul(pool.accGyfiPerShare).div(1e12).sub(
                     user.rewardDebt
                 );
-            safeGyfiTransfer(msg.sender, pending);
+
+            require(
+                gyfi.transfer(msg.sender, pending),
+                "GYFIMasterChef: Transfer Failed"
+            );
         }
         pool.token.safeTransferFrom(
             address(msg.sender),
@@ -240,7 +218,11 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
             user.amount.mul(pool.accGyfiPerShare).div(1e12).sub(
                 user.rewardDebt
             );
-        safeGyfiTransfer(msg.sender, pending);
+
+        require(
+            gyfi.transfer(msg.sender, pending),
+            "GYFIMasterChef: Transfer Failed"
+        );
         user.amount = user.amount.sub(_amount);
         user.rewardDebt = user.amount.mul(pool.accGyfiPerShare).div(1e12);
         pool.token.safeTransfer(address(msg.sender), _amount);
@@ -258,27 +240,9 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         user.rewardDebt = 0;
     }
 
-    // Safe gyfi transfer function, just in case if rounding error causes pool to not have enough GYFIs.
-    function safeGyfiTransfer(address _to, uint256 _amount) internal {
-        uint256 gyfiBal = gyfi.balanceOf(address(this));
-        if (_amount > gyfiBal) {
-            gyfi.transfer(_to, gyfiBal);
-        } else {
-            gyfi.transfer(_to, _amount);
-        }
-    }
-
     // Update dev address by the previous dev.
     function dev(address _devaddr) public {
         require(msg.sender == devaddr, "dev: wut?");
         devaddr = _devaddr;
-    }
-
-    // Additional functions
-
-    /// @notice Set the bonus multiplier. only callable by governance
-    /// @param _bonusMultiplier new bonus mulitplier to be set.
-    function setMultiplier(uint256 _bonusMultiplier) public onlyOwner {
-        bonusMultiplier = _bonusMultiplier;
     }
 }
