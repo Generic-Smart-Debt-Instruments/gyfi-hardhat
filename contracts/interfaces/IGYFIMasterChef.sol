@@ -17,19 +17,21 @@ interface IGYFIMasterChef {
     /// @notice Returns the info for a farmer.
     /// @param _pid Unique ID for the pool.
     /// @param _address Address of the farmer.
-    /// @return amount_ Amount of tokens.
-    /// @return rewardDebt_ Reduces rewards to account for deposits/withdraws. See Sush's masterchef for details.
-    function userInfo(uint256 _pid, uint256 _address)
+    /// @return
+    /// amount_ Amount of tokens.
+    /// rewardDebt_ Reduces rewards to account for deposits/withdraws. See Sush's masterchef for details.
+    function userInfo(uint256 _pid, address _address)
         external
         view
         returns (uint256 amount_, uint256 rewardDebt_);
 
     /// @notice Returns the info for a pool.
     /// @param _pid Unique ID for the pool.
-    /// @return token_ Token deposited to the pool.
-    /// @return allocPoint_ Allocation points assigned to pool, affects percentage of GYFI to pool.
-    /// @return lastRewardBlock_ Last block number that GYFI distribution occured.
-    /// @return accGyfiPerShare_ Accumulated GYFIs per share times 10**12.
+    /// @return
+    /// token_ Token deposited to the pool.
+    /// allocPoint_ Allocation points assigned to pool, affects percentage of GYFI to pool.
+    /// lastRewardBlock_ Last block number that GYFI distribution occured.
+    /// accGyfiPerShare_ Accumulated GYFIs per share times 10**12.
     function poolInfo(uint256 _pid)
         external
         view
