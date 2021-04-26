@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./interfaces/IGYFIMasterChef.sol";
 import "./GYFIToken.sol";
 
+import "hardhat/console.sol";
 /// @title Generic Smart Debt Instrument NFTs for lending against generic assets including vaults. Forked from Sushi's MasterChef.
 /// @author jkp
 contract GYFIMasterChef is Ownable, IGYFIMasterChef {
@@ -110,13 +111,13 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         uint256 _allocPoint,
         bool _withUpdate
     ) public override onlyOwner {
-        if (_withUpdate) {
-            massUpdatePools();
-        }
         totalAllocPoint = totalAllocPoint.sub(poolInfo[_pid].allocPoint).add(
             _allocPoint
         );
         poolInfo[_pid].allocPoint = _allocPoint;
+        if (_withUpdate) {
+            massUpdatePools();
+        }
     }
 
     /// @notice The amount of GYFI pending for the farmer in a pool.
@@ -155,7 +156,8 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
     /// @param _pid Unique ID for the pool.
     function updatePool(uint256 _pid) public override {
         PoolInfo storage pool = poolInfo[_pid];
-        if (block.number <= pool.lastRewardBlock) {
+        if (block.number <= pool.lastRewardBlock) 
+        {
             return;
         }
         uint256 lpSupply = pool.token.balanceOf(address(this));
@@ -186,7 +188,7 @@ contract GYFIMasterChef is Ownable, IGYFIMasterChef {
         UserInfo storage user = userInfo[_pid][msg.sender];
         updatePool(_pid);
         if (user.amount > 0) {
-            uint256 pending =
+            uint256 pending = 
                 user.amount.mul(pool.accGyfiPerShare).div(1e12).sub(
                     user.rewardDebt
                 );
