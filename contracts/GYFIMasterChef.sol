@@ -9,7 +9,6 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./interfaces/IGYFIMasterChef.sol";
 import "./GYFIToken.sol";
 
-import "hardhat/console.sol";
 /// @title Generic Smart Debt Instrument NFTs for lending against generic assets including vaults. Forked from Sushi's MasterChef.
 /// @author jkp
 contract GYFIMasterChef is Ownable, IGYFIMasterChef {
