@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.3 <0.9.0;
 
+import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20SnapshotUpgradeable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
@@ -56,7 +57,7 @@ contract GYFIPool is IGYFIPool, ERC20SnapshotUpgradeable {
         override(IGYFIPool, ERC20SnapshotUpgradeable)
         returns (uint256 balance_)
     {
-        balance_ = balanceOfAt(_account, _snapshotID);
+        balance_ = super.balanceOfAt(_account, _snapshotID);
     }
 
     function totalSupplyAt(uint256 _snapshotID)
@@ -65,6 +66,6 @@ contract GYFIPool is IGYFIPool, ERC20SnapshotUpgradeable {
         override(IGYFIPool, ERC20SnapshotUpgradeable)
         returns (uint256 totalSupply_)
     {
-        totalSupply_ = totalSupplyAt(_snapshotID);
+        totalSupply_ = super.totalSupplyAt(_snapshotID);
     }
 }

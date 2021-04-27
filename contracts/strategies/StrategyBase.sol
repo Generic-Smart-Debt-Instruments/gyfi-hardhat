@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.3 <0.9.0;
 
+import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "../interfaces/IGYFIStrategy.sol";
@@ -76,10 +77,7 @@ abstract contract StrategyBase is IGYFIStrategy {
     {
         _preWithdraw(_amount, _receiver);
         totalWithdraws = totalWithdraws.add(_amount);
-        require(
-            currency.transferFrom(_receiver, address(this), _amount),
-            "StrategyBase: transfer failed"
-        );
+        currency.transfer(_receiver, _amount);
         _postWithdraw(_amount, _receiver);
     }
 
@@ -90,7 +88,10 @@ abstract contract StrategyBase is IGYFIStrategy {
     {
         _preDeposit(_amount, _sender);
         totalDeposits = totalDeposits.add(_amount);
-        currency.transfer(_sender, _amount);
+        require(
+            currency.transferFrom(_sender, address(this), _amount),
+            "StrategyBase: transfer failed"
+        );
         _postDeposit(_amount, _sender);
     }
 
