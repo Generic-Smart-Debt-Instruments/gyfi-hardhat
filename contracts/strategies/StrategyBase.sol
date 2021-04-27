@@ -76,10 +76,7 @@ abstract contract StrategyBase is IGYFIStrategy {
     {
         _preWithdraw(_amount, _receiver);
         totalWithdraws = totalWithdraws.add(_amount);
-        require(
-            currency.transferFrom(_receiver, address(this), _amount),
-            "StrategyBase: transfer failed"
-        );
+        currency.transfer(_receiver, _amount);
         _postWithdraw(_amount, _receiver);
     }
 
@@ -90,7 +87,10 @@ abstract contract StrategyBase is IGYFIStrategy {
     {
         _preDeposit(_amount, _sender);
         totalDeposits = totalDeposits.add(_amount);
-        currency.transfer(_sender, _amount);
+        require(
+            currency.transferFrom(_sender, address(this), _amount),
+            "StrategyBase: transfer failed"
+        );
         _postDeposit(_amount, _sender);
     }
 

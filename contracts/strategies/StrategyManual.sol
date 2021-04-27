@@ -2,13 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "./StrategyBase.sol";
-import "gauc/contracts/interfaces/IGAUC.sol";
-import "gsdi/contracts/interfaces/IGSDINFT.sol";
-import "gsdi/contracts/interfaces/IGSDIWallet.sol";
+import "gauc/contracts/GAUC.sol";
+import "gsdi/contracts/GSDINFT.sol";
+import "gsdi/contracts/GSDIWallet.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract StrategyManual is StrategyBase, AccessControl {
+contract StrategyManual is StrategyBase, AccessControl, ERC721Holder {
     //TODO: add management fees
     //TODO: hold unused dai in aave
     using SafeMath for uint256;
@@ -81,7 +82,7 @@ contract StrategyManual is StrategyBase, AccessControl {
             ,
             ,
 
-        ) = gsdi.metadata(_auctionId);
+        ) = gsdi.metadata(tokenId);
         gsdiInfo[tokenId] = GSDIInfo(
             block.timestamp,
             price,

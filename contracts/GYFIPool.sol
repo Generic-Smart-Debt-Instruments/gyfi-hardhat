@@ -56,7 +56,7 @@ contract GYFIPool is IGYFIPool, ERC20SnapshotUpgradeable {
         override(IGYFIPool, ERC20SnapshotUpgradeable)
         returns (uint256 balance_)
     {
-        balance_ = balanceOfAt(_account, _snapshotID);
+        balance_ = super.balanceOfAt(_account, _snapshotID);
     }
 
     function totalSupplyAt(uint256 _snapshotID)
@@ -65,6 +65,6 @@ contract GYFIPool is IGYFIPool, ERC20SnapshotUpgradeable {
         override(IGYFIPool, ERC20SnapshotUpgradeable)
         returns (uint256 totalSupply_)
     {
-        totalSupply_ = totalSupplyAt(_snapshotID);
+        totalSupply_ = super.totalSupplyAt(_snapshotID);
     }
 }
